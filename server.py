@@ -123,6 +123,29 @@ def get_product_by_name():
             #matched.append(product)
     return jsonify({"results": matched}), HTTPStatus.OK
 
+
+# -------- Assignment #4 --------
+
+
+# PUT /api/coupons/<int: id>
+@app.route("/api/coupons/<int:id>", methods=["PUT"])
+def update_coupon(id):
+    data = request.get_json()
+    for coupon in coupons:
+        if coupon["_id"] == id:
+            coupon["code"] = data.get("code", coupon["code"])
+            coupon["discount"] = data.get("discount", coupon["discount"])
+            return jsonify({"message": "Coupon updated successfully"}), HTTPStatus.OK
+    return jsonify({"message": "Coupon not found"}), HTTPStatus.NOT_FOUND
+
+
+# GET /api/coupons/search
+@app.route("/api/coupons/search", methods=["GET"])
+def search_coupons():
+    filtered_coupons = [c for c in coupons if c["discount"] < 30]
+    return jsonify(filtered_coupons), HTTPStatus.OK
+
+
 #session 2 
 
 coupons = [
